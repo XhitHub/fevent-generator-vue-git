@@ -1,0 +1,6 @@
+id,text,tags,nextPossEvents,nextPossEventsTags
+p1,pre scene 1,p,,"p, m"
+m1,main scene 1,m,,d
+m2,main scene 2,m,,d
+d1,sted 1,"d, end",,
+d2,sted 2,"d, end",,
