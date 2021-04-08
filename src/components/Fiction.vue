@@ -1,11 +1,14 @@
 <template>
   <div class="fiction">
     <div>
-      {{fiction.activeCharacter.img}}
-      <img v-bind:src="fiction.activeCharacter.img" />
+      <div>{{fiction.activeCharacter.img}}</div>
+      <img2 v-bind:src="IMG_ROOT + fiction.activeCharacter.img" />
     </div>
     <div>{{fiction.activeCharacter.activeEvent.text}}</div>
-    <div><input type="button" v-click="nextScene" value="Next"/></div>
+    <div>{{JSON.stringify(fiction.activeCharacter.activeEvent)}}</div>
+    <div><input type="button" v-on:click="nextScene" value="Next"/></div>
+    <h4>debug</h4>
+    <div>{{JSON.stringify(fiction.characters, null, 2)}}</div>
   </div>
 </template>
 
@@ -21,15 +24,17 @@ export default {
   },
   data: function() {
     return {
+      IMG_ROOT: './possCharacters/',
       fiction: null,
     }
   },
   created: function() {
-    this.fiction = fc.generateFiction(this.props.charactersCount)
+    this.fiction = fc.generateFiction(2)
     console.log("🚀 ~ file: Fiction.vue ~ line 29 ~ this.fiction", this.fiction)
   },
   methods: {
     nextScene: function() {
+      console.log("nextScene")
       fc.nextScene(this.fiction)
     } 
   }

@@ -1,0 +1,71 @@
+[
+  {
+    "id": "p1",
+    "text": "pre scene 1",
+    "tags": [
+      "p",
+      "init"
+    ],
+    "nextPossEvents": [
+      
+    ],
+    "nextPossEventsTags": [
+      "p",
+      "m"
+    ]
+  },
+  {
+    "id": "m1",
+    "text": "main scene 1",
+    "tags": [
+      "m"
+    ],
+    "nextPossEvents": [
+      ""
+    ],
+    "nextPossEventsTags": [
+      "d"
+    ]
+  },
+  {
+    "id": "m2",
+    "text": "main scene 2",
+    "tags": [
+      "m"
+    ],
+    "nextPossEvents": [
+      
+    ],
+    "nextPossEventsTags": [
+      "d"
+    ]
+  },
+  {
+    "id": "d1",
+    "text": "sted 1",
+    "tags": [
+      "d",
+      "end"
+    ],
+    "nextPossEvents": [
+      ""
+    ],
+    "nextPossEventsTags": [
+      ""
+    ]
+  },
+  {
+    "id": "d2",
+    "text": "sted 2",
+    "tags": [
+      "d",
+      "end"
+    ],
+    "nextPossEvents": [
+      ""
+    ],
+    "nextPossEventsTags": [
+      ""
+    ]
+  }
+]

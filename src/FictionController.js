@@ -1,11 +1,6 @@
-const csv = require('csvtojson')
-// import csv from 'csvtojson'
-// const fs = require('fs');
-// import { readdirSync } from 'fs';
+const myEvents = require('./data/events.json')
+const possCharactersImgs = require('./data/possCharactersImgs.json')
 
-const CSV_PATH = './data/input.csv'
-const POSS_CHARACTERS_IMGS_PATH = './assets/poss_characters/'
-const SPLITER = ', '
 const INITIAL_EVENT_TAG = 'init'
 const END_EVENT_TAG = 'end'
 
@@ -40,23 +35,9 @@ class FictionController {
   }
 
   init() {
-    csv()
-      .fromFile(CSV_PATH)
-      .then((rawEvents)=>{
-        this.events = rawEvents.map(evt => {
-          return {
-            id: evt.id,
-            text: evt.text,
-            tags: evt.tags.split(SPLITER),
-            nextPossEvents: evt.nextPossEvents.split(SPLITER),
-            nextPossEventsTags: evt.nextPossEventsTags.split(SPLITER),
-          }
-        })
-      })
-    // let files = fs.readdirSync(POSS_CHARACTERS_IMGS_PATH);
-    // let files = readdirSync(POSS_CHARACTERS_IMGS_PATH); 
-    let files = [POSS_CHARACTERS_IMGS_PATH]
-    this.possCharacterImgs = files
+    console.log("FictionController -> init -> myEvents", myEvents)
+    this.events = myEvents
+    this.possCharacterImgs = possCharactersImgs
   }
 
   randomItem(arr) {
@@ -88,6 +69,7 @@ class FictionController {
       img: this.randomItem(this.possCharacterImgs),
       story: this.generateCharacterStory()
     }
+    console.log("FictionController -> generateCharacter -> character", character)
     character.activeEvent = character.story[0]
     return character
   }
@@ -99,7 +81,7 @@ class FictionController {
     let story = []
     var currEvent = startEvent
     story.push(currEvent)
-    while(!currEvent.tags.includes(END_EVENT_TAG)) {
+    while(currEvent && !currEvent.tags.includes(END_EVENT_TAG)) {
       // set next currEvent
       let possNextEvents = []
       currEvent.nextPossEvents.forEach(evtId => {
@@ -112,16 +94,18 @@ class FictionController {
         break
       }
       let nextEvent = this.randomItem(possNextEvents)
-      currEvent.next = nextEvent
-      currEvent = nextEvent
+      currEvent['next'] = nextEvent
       story.push(currEvent)
+      currEvent = nextEvent
     }
     return story
   }
 
   nextScene(fiction) {
+    console.log("FictionController -> nextScene -> fiction.activeCharacter.activeEvent", fiction.activeCharacter.activeEvent)
     fiction.activeCharacter.activeEvent = fiction.activeCharacter.activeEvent.nextEvent
     fiction.activeCharacter = this.randomItem(fiction.characters)
+    console.log("FictionController -> nextScene -> fiction.activeCharacter", fiction.activeCharacter)
   }
 }
 
