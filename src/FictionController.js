@@ -22,7 +22,7 @@ const END_EVENT_TAG = 'end'
 //   tags: ['tag1'],
 //   nextPossEvents: [],
 //   nextPossEventsTags: ['tag2', 'tag3'],
-//   next: null,
+//   nextEvent: null,
 // }
 
 
@@ -58,16 +58,18 @@ class FictionController {
       characters: []
     }
     for (let i = 0; i<charactersCount; i++){
-      res.characters.push(this.generateCharacter())
+      res.characters.push(this.generateCharacter(i+1))
     }
     res.activeCharacter = this.randomItem(res.characters)
     return res
   }
 
-  generateCharacter() {
+  generateCharacter(id) {
     let character = {
+      id: id,
       img: this.randomItem(this.possCharacterImgs),
-      story: this.generateCharacterStory()
+      story: this.generateCharacterStory(),
+      status: 1,
     }
     console.log("FictionController -> generateCharacter -> character", character)
     character.activeEvent = character.story[0]
@@ -94,7 +96,7 @@ class FictionController {
         break
       }
       let nextEvent = this.randomItem(possNextEvents)
-      currEvent['next'] = nextEvent
+      currEvent['nextEvent'] = nextEvent
       story.push(currEvent)
       currEvent = nextEvent
     }
@@ -102,10 +104,19 @@ class FictionController {
   }
 
   nextScene(fiction) {
-    console.log("FictionController -> nextScene -> fiction.activeCharacter.activeEvent", fiction.activeCharacter.activeEvent)
-    fiction.activeCharacter.activeEvent = fiction.activeCharacter.activeEvent.nextEvent
-    fiction.activeCharacter = this.randomItem(fiction.characters)
-    console.log("FictionController -> nextScene -> fiction.activeCharacter", fiction.activeCharacter)
+    if (fiction.activeCharacter.activeEvent.nextEvent != undefined) {
+      fiction.activeCharacter.activeEvent = fiction.activeCharacter.activeEvent.nextEvent
+    } else {
+      fiction.activeCharacter.status = 0
+    }
+    // // chars with active scene
+    // let activeChars = fiction.characters.filter(c => c.activeEvent != undefined)
+    // chars with status 1
+    let activeChars = fiction.characters.filter(c => c.status == 1)
+    if (activeChars.length > 0) {
+      // only switch if there exist still active chars
+      fiction.activeCharacter = this.randomItem(activeChars)
+    }
   }
 }
 
