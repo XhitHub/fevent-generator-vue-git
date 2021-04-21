@@ -1,21 +1,17 @@
 <template>
   <div class="fiction" @keydown.enter="nextScene">
-    <div>
-      <div>Char {{fiction.activeCharacter.id}}</div>
-      <div>{{fiction.activeCharacter.img}}</div>
-      <img2 v-bind:src="IMG_ROOT + fiction.activeCharacter.img" />
-    </div>
-    <div>{{fiction.activeCharacter.activeEvent.text}}</div>
-    <div><input type="button" v-on:click="nextScene" value="Next"/></div>
+    <Character :character="fiction.activeCharacter"></Character>
 
-    <div>
+    <div class="div-ended">
       <h4>Ended</h4>
       <div v-for="ic in inactiveCharacters" v-bind:key="ic.id">
-        <div>Char {{ic.id}}</div>
-        <div>{{ic.img}}</div>
-        <img2 v-bind:src="IMG_ROOT + ic.img" />
-        <div>{{ic.activeEvent.text}}</div>
+        <Character :character="ic"></Character>
       </div>
+    </div>
+
+    <div class="control-btns">
+      <input class="btn btn-primary mr-4" type="button" v-on:click="nextScene" value="Next"/>
+      <input type="checkbox" v-model="autoplay" /> Autoplay - <input type="number" v-model="autoplayInterval" /> seconds
     </div>
 
     <div v-if="debug">
@@ -28,18 +24,24 @@
 
 <script>
 import FictionController from '../FictionController.js'
+import Character from './Character.vue'
 
 const fc = new FictionController()
 
 export default {
-  name: 'App',
+  name: 'Fiction',
   props: {
     charactersCount: Number,
+  },
+  components: {
+    Character
   },
   data: function() {
     return {
       IMG_ROOT: './possCharacters/',
       fiction: null,
+      autoplay: false,
+      autoplayInterval: 4,
       debug: false,
     }
   },
@@ -59,6 +61,11 @@ export default {
         this.nextScene()
       }
     });
+    setInterval(() => {
+      if (this.autoplay) {
+        this.nextScene()
+      }
+    }, this.autoplayInterval * 1000)
   },
   methods: {
     nextScene: function() {
@@ -68,3 +75,19 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+.div-ended {
+  border-top: 1px dotted #DDD;
+  margin: 10px 10px;
+  padding: 10px 0px;
+}
+
+.control-btns {
+  position: fixed;
+  bottom: 10px;
+  text-align: center;
+  width: 100%;
+}
+</style>
